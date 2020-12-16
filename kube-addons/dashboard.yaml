@@ -38,8 +38,10 @@ metadata:
   namespace: kubernetes-dashboard
 spec:
   ports:
-    - port: 31077
-      targetPort: 8443
+  - nodePort: 30000
+    port: 443
+    protocol: TCP
+    targetPort: 8443
   type: NodePort
   selector:
     k8s-app: kubernetes-dashboard
