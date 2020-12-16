@@ -26,7 +26,8 @@ echo $IPADDR > /vagrant/ip-address.txt
 
 # Set up Kubernetes
 NODENAME=$(hostname -s)
-kubeadm init --apiserver-cert-extra-sans=$IPADDR  --node-name $NODENAME \
+kubeadm init --apiserver-cert-extra-sans=$IPADDR  --pod-network-cidr=10.244.0.0/16 \
+  --node-name $NODENAME \
   --image-repository registry.cn-hangzhou.aliyuncs.com/google_containers
 
 
