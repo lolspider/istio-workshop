@@ -18,6 +18,11 @@ vagrant up
 vagrant ssh default
 ```
 
+## Deploy CNI (flannel)
+
+```
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+```
 
 ## Set up kubernetes dashboard(optional)
 ```
