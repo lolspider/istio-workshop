@@ -40,6 +40,7 @@ kubectl taint nodes --all node-role.kubernetes.io/master-
 curl -L https://istio.io/downloadIstio | sh -
 cd istio-1.8.1
 echo "export PATH=$PWD/bin:$PATH" >> ~/.bashrc
+istioctl install --set profile=demo
 ```
 
 ## Add a namespace label to instruct Istio to automatically inject Envoy sidecar proxies when you deploy your application later
