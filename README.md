@@ -61,7 +61,7 @@ kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
 
 export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
 
-export HOST=$(ip addr show eth1 | grep inet | grep -v inet6 | awk -F '[ /]' '{print $6}')
+export HOST=$(ip -4 address show dev eth1 | grep inet | awk '{print $2}' | cut -f1 -d/)
 
 echo "http://$HOST:$INGRESS_PORT/productpage"
 ```
