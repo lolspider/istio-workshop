@@ -114,4 +114,37 @@ Then access the Bookinfo URL in you browser, there is a 2 second delay whenever 
 kubectl apply -f istio/demo/request-timeout-p2.yaml
 ```
 
+### clean up
+```
+kubectl delete -f samples/bookinfo/networking/virtual-service-all-v1.yaml
+```
+
 ## Circuit Breaking
+
+### Deploy httpbin 
+```
+kubectl apply -f samples/httpbin/httpbin.yaml
+```
+
+### Adding a client to test
+```
+kubectl apply -f samples/httpbin/sample-client/fortio-deploy.yaml
+export FORTIO_POD=$(kubectl get pods -lapp=fortio -o 'jsonpath={.items[0].metadata.name}')
+kubectl exec "$FORTIO_POD" -c fortio -- /usr/bin/fortio curl -quiet http://httpbin:8000/get
+```
+
+```
+kubectl exec "$FORTIO_POD" -c fortio -- /usr/bin/fortio load -c 2 -qps 0 -n 20 -loglevel Warning http://httpbin:8000/get
+kubectl exec "$FORTIO_POD" -c fortio -- /usr/bin/fortio load -c 3 -qps 0 -n 30 -loglevel Warning http://httpbin:8000/get
+
+kubectl exec "$FORTIO_POD" -c istio-proxy -- pilot-agent request GET stats | grep httpbin | grep pending (optional)
+```
+### clean up
+```
+kubectl delete destinationrule httpbin
+kubectl delete deploy httpbin fortio-deploy
+kubectl delete svc httpbin fortio
+
+```
+
+
